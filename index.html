@@ -26,15 +26,50 @@
         const scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color3.White(); // change background
 
-        const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -10), scene); // X, Y, Z
-        camera.setTarget(BABYLON.Vector3.Zero());
-
         const box = BABYLON.Mesh.CreateBox("Box", 4.0, scene);
+        const box2 = BABYLON.Mesh.CreateBox("Box2", 4.0, scene);
+
+        const material = new BABYLON.StandardMaterial("material1", scene);
+        material.wireframe = true;
+
+        box2.material = material;
+        box2.position = new BABYLON.Vector3(0,3,0);
+
+        // const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -10), scene); // X, Y, Z
+
+        /* 
+        const camera = new BABYLON.ArcRotateCamera("arcCamera", 
+          BABYLON.Tools.ToRadians(45),
+          BABYLON.Tools.ToRadians(45),
+          10.0, 
+          box.position, 
+          scene
+        );
+        camera.setTarget(BABYLON.Vector3.Zero());
+        */
+
+         const camera = new BABYLON.FollowCamera("followCam", BABYLON.Vector3.Zero(), scene);
+        
+         camera.lockedTarget = box;
+         camera.radius = 50;
+         camera.heightOffset = 5;
+
+        camera.attachControl(canvas, true);
+        
+        /*
+        // camera control with arrows
+        camera.keysUp.push(87);
+        camera.keysDown.push(83);
+        camera.keysLeft.push(65);
+        camera.keysRight.push(68);
+        */
+
         return scene
       }
 
       const scene = createScene();
       engine.runRenderLoop(() => {
+        scene.getMeshByName("Box").position.z -= 0.01;
         scene.render();
       }); 
 
