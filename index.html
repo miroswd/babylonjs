@@ -48,11 +48,11 @@
         camera.setTarget(BABYLON.Vector3.Zero());
         */
 
-         const camera = new BABYLON.FollowCamera("followCam", BABYLON.Vector3.Zero(), scene);
-        
-         camera.lockedTarget = box;
-         camera.radius = 50;
-         camera.heightOffset = 5;
+        const camera = new BABYLON.FollowCamera("followCam", BABYLON.Vector3.Zero(), scene);
+      
+        camera.lockedTarget = box;
+        camera.radius = 10;
+        camera.heightOffset = 5;
 
         camera.attachControl(canvas, true);
         
@@ -64,12 +64,49 @@
         camera.keysRight.push(68);
         */
 
+        const light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 10, 0), scene);
+
+        light.diffuse = new BABYLON.Color3(1, 0, 1); // RGB
+
+        scene.actionManager = new BABYLON.ActionManager(scene);
+        scene.actionManager.registerAction(
+          new BABYLON.ExecuteCodeAction({
+            trigger: BABYLON.ActionManager.OnKeyUpTrigger, 
+            parameter: " ", // space enable light
+          }, () => {
+            light.setEnabled(!light.isEnabled());
+          })
+        ); // on/off light using space bar
+
+        /*
+        const spotLight = new BABYLON.SpotLight(
+          "spotLight",
+          new BABYLON.Vector3(0, 10, 0),
+          new BABYLON.Vector3(0, 1, 0),
+          BABYLON.Tools.ToRadians(45),
+          0.1,
+          scene          
+        );
+        */
+
         return scene
       }
 
       const scene = createScene();
       engine.runRenderLoop(() => {
-        scene.getMeshByName("Box").position.z -= 0.01;
+        scene.getMeshByName("Box").position.z += 0.001; // animation z axis
+        
+
+        const light = scene.getLightByName("pointLight")
+        // const spotLight = scene.getLightByName("spotLight")
+
+        // Color Animation  
+        light.diffuse.r += 0.01;
+        light.diffuse.g += 0.01;
+        light.diffuse.b -= 0.01;
+
+        light.position.y -= 0.1;
+
         scene.render();
       }); 
 
