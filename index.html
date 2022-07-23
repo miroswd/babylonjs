@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+
+  <title>BabylonJs Demo</title>
+
+  <style>
+    #canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("canvas");
+      const engine = new BABYLON.Engine(canvas, true);
+
+      const createScene = () => {
+        const scene = new BABYLON.Scene(engine);
+        scene.clearColor = new BABYLON.Color3.White(); // change background
+
+        const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, -10), scene); // X, Y, Z
+        camera.setTarget(BABYLON.Vector3.Zero());
+
+        const box = BABYLON.Mesh.CreateBox("Box", 4.0, scene);
+        return scene
+      }
+
+      const scene = createScene();
+      engine.runRenderLoop(() => {
+        scene.render();
+      }); 
+
+    })
+  </script>
+</body>
+</html>
